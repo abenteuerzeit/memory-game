@@ -10,7 +10,8 @@ def console_clear():
 
 def generate_board(height, width):
     try:
-        if height > len(alphabet) or width > len(alphabet) or height % 2 != 0 or width % 2 != 0:
+        ammount_of_letters = height * width
+        if ammount_of_letters > len(alphabet) or ammount_of_letters % 2 != 0:
             raise ValueError
         else:
             matrix = []
@@ -29,15 +30,34 @@ def generate_board(height, width):
 # The program checks whether the position of the input letter in the alphabet does not exceed the number of columns on the board.
 # The program keeps asking the user for a field until receiving valid input.
 # After the input is validated, coordinates of the selected field are passed further into the program logic as an integer tuple (row, column).
+def display_menu():
+    print("Select a difficulty level. Enter the corresponding number. ")
+    print("1. Easy")
+    print("2. Medium")
+    print("3. Hard")
 
 
-# Get difficulty level from user
+def get_difficulty():
+    while True:
+        display_menu()
+        try:
+            user_input = int(input("Select a difficulty level: "))
+            if user_input == 1:
+                board_size = [5, 4]
+                return board_size
+            elif user_input == 2:
+                board_size = [5, 6]
+                return board_size
+            elif user_input == 3:
+                board_size = [5, 10]
+                return board_size
+            else:
+                print("\nOption not avaialable.")
+                raise ValueError
+        except ValueError:
+            print("\nInvalid input. Try again. ")
 
-# The user can select the difficulty level before starting the game. The difficulty level dictates the size of the board.
-# One of the three difficulty levels can be picked, easy, medium, and hard.
-# At the Easy difficulty level, the size of the board is 5x4.
-# At the Medium difficulty level, the size of the board is 5x6
-# At the Hard difficulty level, the size of the board is 5x10
+
 
 # Implement the board drawing mechanic, according to the following requirements.
 # When drawing the board, the coordinates of fields are also be displayed (numbers of rows and letters of columns), similar to the following example:
