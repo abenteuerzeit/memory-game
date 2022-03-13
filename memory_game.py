@@ -4,7 +4,6 @@ import random
 alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
 
 
-# clears the screen
 def console_clear():
     os.system('cls' if os.name == 'nt' else 'clear')
 
@@ -144,6 +143,7 @@ def cont():
     while press_enter != "":
         press_enter = input("Press Enter to continue")
     console_clear()
+
 
 def is_complete(gameboard):
     check = len(gameboard*len(gameboard[0]))
