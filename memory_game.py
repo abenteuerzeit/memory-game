@@ -1,4 +1,3 @@
-from multiprocessing.sharedctypes import Value
 import os
 import random
 
@@ -11,13 +10,15 @@ def console_clear():
 
 def generate_board(rows, columns):
     try:
+        if rows or columns <= 0:
+            raise ValueError
         ammount_of_letters = rows * columns
         pairs = []
         for letter in range(int(ammount_of_letters/2)):
             pair = random.choice(alphabet)
             pairs.append(pair)
             pairs.append(pair)
-        if ammount_of_letters > len(alphabet)*2 or ammount_of_letters % 2 != 0:
+        if ammount_of_letters > len(alphabet)*2 or ammount_of_letters % 2 != 0 or ammount_of_letters <= 0:
             raise ValueError
         else:
             matrix = []
@@ -30,8 +31,15 @@ def generate_board(rows, columns):
                 matrix.append(row)
             return matrix
     except ValueError:
-        print("Error! \nEither the height or width is an odd number,")
-        print("or not enough letters in the latin alphabet to generate the board.")
+        print("")
+        error = "\n"+"    FATALITY! "*5 + "\n"
+        print(error)
+        print("\tEither the height or width is an odd number,")
+        print("\tor not enough letters in the latin alphabet to generate the board.")
+        print("\n\tEither way, these dimensions are crap since I can't generate pairs!")
+        print("\tTry harder!")
+        print(error)
+        print("\n\n\t\t(╯°□°)╯︵ ┻━┻ \n\n")
 
 
 def get_user_field_position(board):
@@ -66,18 +74,19 @@ def get_user_field_position(board):
 
 
 def display_menu():
-    print("Select a difficulty level. Enter the corresponding number. ")
-    print("0. Noob")
-    print("1. Easy")
-    print("2. Medium")
-    print("3. Hard")
+    print("\tSelect a difficulty level. Enter the corresponding number.\n")
+    print("\t\t0. Noob")
+    print("\t\t1. Easy")
+    print("\t\t2. Medium")
+    print("\t\t3. Hard")
+    print("\t\t4. Custom board size...")
 
 
 def get_difficulty():
     while True:
         display_menu()
         try:
-            user_input = int(input("Select a difficulty level: "))
+            user_input = int(input("Enter level: "))
             if user_input == 1:
                 return [5, 4]
             elif user_input == 2:
@@ -86,6 +95,14 @@ def get_difficulty():
                 return [5, 10]
             elif user_input == 0:
                 return [2, 2]
+            elif user_input == 4:
+                while True:
+                    try:
+                        height = int(input("Enter how many rows you want as a whole number: "))
+                        width = int(input("Enter how many columns you want as a whole number: "))
+                        return height, width
+                    except ValueError:
+                        continue
             else:
                 print("\nOption not avaialable.")
                 raise ValueError
@@ -128,7 +145,7 @@ def is_same_position(first_guess, second_guess, board):
             else:
                 raise ValueError
         except ValueError:
-            print("Don't choose the same position!")
+            print("\nDon't choose the same position!")
             second_guess = get_user_field_position(board)
             row2 = second_guess[0]
             col2 = second_guess[1]
@@ -136,9 +153,9 @@ def is_same_position(first_guess, second_guess, board):
 
 
 def cont():
-    press_enter = input("Press Enter to continue...")
+    press_enter = input("\tPress Enter to continue...")
     while press_enter != "":
-        press_enter = input("Press Enter to continue")
+        press_enter = input("\tPress Enter to continue")
     console_clear()
 
 
@@ -200,14 +217,16 @@ def get_pair(gameboard, board, matches):
                 draw_board(show_letter(gameboard, board, guess))
         except ValueError:
             if attempt == 2:
-                print("Try again! That field is already revealed")
+                print("\nTry again! That field is already revealed...")
                 attempt = 1
             if pair[attempt] in matches:
-                print("Try again! That field is already revealed")
+                print("\nTry again! That field is already revealed...")
                 attempt = 0
     match = set_board(gameboard, board, pair[1], pair[2])
     if match:
-        print("Match!")
+        print("\n\t"+":"*10)
+        print("\t  Match!")
+        print("\t"+":"*10+"\n")
     return [pair[1], pair[2]]
 
 
@@ -228,13 +247,14 @@ def run_game(gameboard, board):
 
 
 def main():
-    print("Welcome to Memory Game!")
+    print("\n\tWelcome to Memory Game! \n")
     board_size = get_difficulty()
     console_clear()
     board = generate_board(board_size[0], board_size[1])
-    gameboard = hide(board)
-    draw_board(hide(board))
-    run_game(gameboard, board)
+    if board:
+        gameboard = hide(board)
+        draw_board(hide(board))
+        run_game(gameboard, board)
 
 
 if __name__ == "__main__":
