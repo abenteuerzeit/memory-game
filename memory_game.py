@@ -28,7 +28,6 @@ def generate_board(rows, columns):
                     row.append(select)
                     pairs.remove(select)
                 matrix.append(row)
-               # matrix.append([random.choice(pairs) for i in range(columns)])
             return matrix
     except ValueError:
         print("Error! \nEither the height or width is an odd number,")
@@ -60,8 +59,6 @@ def get_user_field_position(board):
                 if letter == str.upper(user_position[0]):
                     column = count + 1
             valid = True
-            print("The input is valid, the coordinates are: ")
-            print(row - 1, column - 1)
             return row - 1, column - 1
         except ValueError:
             print("Invalid input! Try again... ")
@@ -113,36 +110,91 @@ def hide(board):
         hidden.append(["#" for i in range(rowlength)])
     return hidden
 
-def show_letter(board):
-    pass
-# During the game, the fields can be either concealed or revealed.
-# The letter of the field is displayed only when the field is revealed.
-# When the field is concealed, # is displayed.
-# The terminal window is cleaned every time the board is redrawn.
+
+def show_letter(gameboard, board, coordinates):
+    row = coordinates[0]
+    column = coordinates[1]
+    gameboard[row][column] = board[row][column]
+    return gameboard
+
+
+def hide_letter(gameboard, board, coordinates):
+    row = coordinates[0]
+    column = coordinates[1]
+    gameboard[row][column] = hide(board[row][column])
+    return gameboard
+
+
+def is_same_position(first_guess, second_guess):
+    while True:
+        try:
+            if second_guess != first_guess:
+                row2 = second_guess[0]
+                col2 = second_guess[1]
+                return row2, col2
+            else:
+                raise ValueError
+        except ValueError:
+            print("Don't choose the same position!")
+            second_guess = input("Enter a new guess: ")
+
+
+def cont():
+    press_enter = input("Press Enter to continue...")
+    while press_enter != "":
+        press_enter = input("Press Enter to continue")
+    console_clear()
+
+def is_complete(gameboard):
+    check = len(gameboard*len(gameboard[0]))
+    hash_count = 0
+    while check > 0:
+        for row in gameboard:
+            for item in row:
+                if item == "#":
+                    hash_count += 1
+                check -= 1
+        if hash_count == 0:
+            print("YOU WIN!")
+            break
 
 
 def main():
-    gameboard = []
     print("Welcome to Memory Game!")
     board_size = get_difficulty()
     console_clear()
     height = board_size[0]
     width = board_size[1]
     board = generate_board(height, width)
+    gameboard = hide(board)
     draw_board(hide(board))
-    print(hide(board))
-    print(board)
-    select = get_user_field_position(board)
-    # gameboard[select] = board[select]
+    steps = 0
+    while True:
 
-# The board is displayed to the user.
-# The game asks asked to select a field, which is then revealed (its letter is being shown on the redrawn board).
-# The game asks to select another field, which is then revealed (its letter is being shown on the redrawn board).
-# If the two selected fields are a match (have the same letter), they remain revealed for the rest of the game.
-# If the two selected fields are not a match (do not have the same letters), the user is asked to press Enter.
-# After that, the fields are concealed again.
-# The game ends when all fields are revealed.
-# The game counts the number of steps taken to complete the game and displays this number after winning the game.
+        first_guess = get_user_field_position(board)
+        row1 = first_guess[0]
+        col1 = first_guess[1]
+        draw_board(show_letter(gameboard, board, first_guess))
+
+        second_guess = get_user_field_position(board)
+        row2 = second_guess[0]
+        col2 = second_guess[1]
+        is_same_position(first_guess, second_guess)
+        draw_board(show_letter(gameboard, board, second_guess))
+
+        if board[row1][col1] == board[row2][col2]:
+            gameboard[row1][col1] = board[row1][col1]
+            gameboard[row2][col2] = board[row2][col2]
+        else:
+            gameboard[row1][col1] = "#"
+            gameboard[row2][col2] = "#"
+
+        cont()
+        if is_complete(gameboard):
+            print(f"You took {steps} to complete the game! ")
+        steps += 1
+
+        draw_board(gameboard)
 
 
 if __name__ == "__main__":
