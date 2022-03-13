@@ -1,4 +1,5 @@
 import os
+import random
 
 alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
 
@@ -8,7 +9,15 @@ def console_clear():
 
 
 def generate_board(height, width):
-# Implement generate_board(height, width) to return a randomly generated matrix of alphabet letters (a list of lists). The inner lists are columns.
+# return a randomly generated matrix of alphabet letters (a list of lists).
+# The inner lists are columns.
+    matrix = []
+    for i in range(height):
+        matrix.append([random.choice(alphabet) for i in range(width)])
+    return matrix
+
+result = generate_board(4,4)
+print(result)
 # A list of lists is returned, representing a list of columns.
 # If the amount of letters required to generate the board (based on the height and width) is greater than the amount of letters in latin alphabet, raise a ValueError.
 # If the amount of letters required to generate the board (based on the height and width) is an odd number, raise a ValueError.
@@ -17,7 +26,6 @@ def generate_board(height, width):
 # DFED
 # CBAE
 # GBGH
-    pass
 
 # Get field position from User
 
