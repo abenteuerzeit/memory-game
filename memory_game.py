@@ -151,16 +151,7 @@ def is_complete(gameboard):
             print("YOU WIN!")
             return True
 
-
-def main():
-    print("Welcome to Memory Game!")
-    board_size = get_difficulty()
-    console_clear()
-    height = board_size[0]
-    width = board_size[1]
-    board = generate_board(height, width)
-    gameboard = hide(board)
-    draw_board(hide(board))
+def run_game(gameboard, board):
     steps = 1
     while True:
 
@@ -183,12 +174,22 @@ def main():
             gameboard[row2][col2] = "#"
 
         cont()
-        draw_board(gameboard)
 
+        draw_board(gameboard)
         if is_complete(gameboard):
             print(f"\nYou took {steps} steps to complete the game! ")
             break
         steps += 1
+
+
+def main():
+    print("Welcome to Memory Game!")
+    board_size = get_difficulty()
+    console_clear()
+    board = generate_board(board_size[0], board_size[1])
+    gameboard = hide(board)
+    draw_board(hide(board))
+    run_game(gameboard, board)
 
 
 if __name__ == "__main__":
