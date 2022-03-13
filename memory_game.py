@@ -156,7 +156,7 @@ def is_complete(gameboard):
                 check -= 1
         if hash_count == 0:
             print("YOU WIN!")
-            break
+            return True
 
 
 def main():
@@ -168,7 +168,7 @@ def main():
     board = generate_board(height, width)
     gameboard = hide(board)
     draw_board(hide(board))
-    steps = 0
+    steps = 1
     while True:
 
         first_guess = get_user_field_position(board)
@@ -190,11 +190,12 @@ def main():
             gameboard[row2][col2] = "#"
 
         cont()
-        if is_complete(gameboard):
-            print(f"You took {steps} to complete the game! ")
-        steps += 1
-
         draw_board(gameboard)
+
+        if is_complete(gameboard):
+            print(f"\nYou took {steps} steps to complete the game! ")
+            break
+        steps += 1
 
 
 if __name__ == "__main__":
