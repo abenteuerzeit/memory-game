@@ -9,15 +9,26 @@ def console_clear():
     os.system('cls' if os.name == 'nt' else 'clear')
 
 
-def generate_board(height, width):
+def generate_board(rows, columns):
     try:
-        ammount_of_letters = height * width
+        ammount_of_letters = rows * columns
+        pairs = []
+        for letter in range(int(ammount_of_letters/2)):
+            pair = random.choice(alphabet)
+            pairs.append(pair)
+            pairs.append(pair)
         if ammount_of_letters > len(alphabet) or ammount_of_letters % 2 != 0:
             raise ValueError
         else:
             matrix = []
-            for i in range(height):
-                matrix.append([random.choice(alphabet) for i in range(width)])
+            for i in range(rows):
+                row = []
+                for value in range(columns):
+                    select = random.choice(pairs)
+                    row.append(select)
+                    pairs.remove(select)
+                matrix.append(row)
+               # matrix.append([random.choice(pairs) for i in range(columns)])
             return matrix
     except ValueError:
         print("Error! \nEither the height or width is an odd number,")
@@ -93,6 +104,17 @@ def draw_board(board):
         print(f"{count + 1}    " + " ".join(row))
     print("")
 
+
+def hide(board):
+    rowlength = len(board[0])
+    hidden = []
+    rows = len(board)
+    for row in range(rows):
+        hidden.append(["#" for i in range(rowlength)])
+    return hidden
+
+def show_letter(board):
+    pass
 # During the game, the fields can be either concealed or revealed.
 # The letter of the field is displayed only when the field is revealed.
 # When the field is concealed, # is displayed.
@@ -100,16 +122,19 @@ def draw_board(board):
 
 
 def main():
+    gameboard = []
     print("Welcome to Memory Game!")
     board_size = get_difficulty()
     console_clear()
     height = board_size[0]
     width = board_size[1]
     board = generate_board(height, width)
-    draw_board(board)
-    get_user_field_position(board)
+    draw_board(hide(board))
+    print(hide(board))
+    print(board)
+    select = get_user_field_position(board)
+    # gameboard[select] = board[select]
 
-# The fields of the letter board are all concealed by default.
 # The board is displayed to the user.
 # The game asks asked to select a field, which is then revealed (its letter is being shown on the redrawn board).
 # The game asks to select another field, which is then revealed (its letter is being shown on the redrawn board).
