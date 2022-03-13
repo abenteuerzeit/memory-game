@@ -117,13 +117,6 @@ def show_letter(gameboard, board, coordinates):
     return gameboard
 
 
-def hide_letter(gameboard, board, coordinates):
-    row = coordinates[0]
-    column = coordinates[1]
-    gameboard[row][column] = hide(board[row][column])
-    return gameboard
-
-
 def is_same_position(first_guess, second_guess):
     while True:
         try:
