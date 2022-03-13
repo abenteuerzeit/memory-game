@@ -10,7 +10,7 @@ def console_clear():
 
 def generate_board(rows, columns):
     try:
-        if rows or columns <= 0:
+        if rows <= 0 or columns <= 0:
             raise ValueError
         ammount_of_letters = rows * columns
         pairs = []
