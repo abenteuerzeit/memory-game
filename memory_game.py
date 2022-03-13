@@ -9,23 +9,17 @@ def console_clear():
 
 
 def generate_board(height, width):
-# return a randomly generated matrix of alphabet letters (a list of lists).
-# The inner lists are columns.
-    matrix = []
-    for i in range(height):
-        matrix.append([random.choice(alphabet) for i in range(width)])
-    return matrix
+    try:
+        if height > len(alphabet) or width > len(alphabet) or height % 2 != 0 or width % 2 != 0:
+            raise ValueError
+        else:
+            matrix = []
+            for i in range(height):
+                matrix.append([random.choice(alphabet) for i in range(width)])
+            return matrix
+    except ValueError:
+        print("Error! \nEither the height or width is an odd number,\nor not enough letters in the latin alphabet to generate the board.")
 
-result = generate_board(4,4)
-print(result)
-# A list of lists is returned, representing a list of columns.
-# If the amount of letters required to generate the board (based on the height and width) is greater than the amount of letters in latin alphabet, raise a ValueError.
-# If the amount of letters required to generate the board (based on the height and width) is an odd number, raise a ValueError.
-# The board consists of pairs of letters from latin alphabet, similar to the following example.
-# AFCH
-# DFED
-# CBAE
-# GBGH
 
 # Get field position from User
 
