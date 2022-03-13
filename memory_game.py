@@ -117,7 +117,7 @@ def show_letter(gameboard, board, coordinates):
     return gameboard
 
 
-def is_same_position(first_guess, second_guess):
+def is_same_position(first_guess, second_guess, board):
     while True:
         try:
             if second_guess != first_guess:
@@ -128,7 +128,10 @@ def is_same_position(first_guess, second_guess):
                 raise ValueError
         except ValueError:
             print("Don't choose the same position!")
-            second_guess = input("Enter a new guess: ")
+            second_guess = get_user_field_position(board)
+            row2 = second_guess[0]
+            col2 = second_guess[1]
+            continue
 
 
 def cont():
@@ -164,7 +167,8 @@ def run_game(gameboard, board):
         second_guess = get_user_field_position(board)
         row2 = second_guess[0]
         col2 = second_guess[1]
-        is_same_position(first_guess, second_guess)
+        second_guess = is_same_position(first_guess, second_guess, board)
+        
         draw_board(show_letter(gameboard, board, second_guess))
 
         if board[row1][col1] == board[row2][col2]:
