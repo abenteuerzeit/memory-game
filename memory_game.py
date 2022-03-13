@@ -1,3 +1,4 @@
+from multiprocessing.sharedctypes import Value
 import os
 import random
 
@@ -155,36 +156,72 @@ def is_complete(gameboard):
             return True
 
 
+def set_board(gameboard, board, guess1, guess2):
+    row1 = guess1[0]
+    col1 = guess1[1]
+    row2 = guess2[0]
+    col2 = guess2[1]
+    # match
+    if board[row1][col1] == board[row2][col2]:
+        gameboard[row1][col1] = board[row1][col1]
+        gameboard[row2][col2] = board[row2][col2]
+        return True
+    else:
+        gameboard[row1][col1] = "#"
+        gameboard[row2][col2] = "#"
+        return False
+
+
+def save_guesses(guess, match):
+    if match:
+        return guess
+
+
+def get_pair(gameboard, board, matches):
+    pair = {}
+    attempt = 0
+    while attempt < 2:
+        try:
+            attempt += 1
+            print(f"Enter value nr {attempt}...")
+            guess = get_user_field_position(board)
+            pair[attempt] = guess
+            if pair[attempt] in matches:
+                raise ValueError
+            elif attempt == 2 and pair[2] == pair[1]:
+                raise ValueError
+            elif attempt == 2:
+                draw_board(show_letter(gameboard, board, guess))
+            elif guess in pair:
+                raise ValueError
+            draw_board(show_letter(gameboard, board, guess))
+        except ValueError:
+            if attempt == 2:
+                print("Try again! That field is already revealed")
+                attempt = 1
+            if pair[attempt] in matches:
+                print("Try again! That field is already revealed")
+                attempt = 0
+    match = set_board(gameboard, board, pair[1], pair[2])
+    if match:
+        print("Match!")
+    return [pair[1], pair[2]]
+
+
 def run_game(gameboard, board):
+    matches = set()
     steps = 1
-    while True:
-
-        first_guess = get_user_field_position(board)
-        row1 = first_guess[0]
-        col1 = first_guess[1]
-        draw_board(show_letter(gameboard, board, first_guess))
-
-        second_guess = get_user_field_position(board)
-        row2 = second_guess[0]
-        col2 = second_guess[1]
-        second_guess = is_same_position(first_guess, second_guess, board)
-        
-        draw_board(show_letter(gameboard, board, second_guess))
-
-        if board[row1][col1] == board[row2][col2]:
-            gameboard[row1][col1] = board[row1][col1]
-            gameboard[row2][col2] = board[row2][col2]
-        else:
-            gameboard[row1][col1] = "#"
-            gameboard[row2][col2] = "#"
-
+    while not is_complete(gameboard):
+        pair = get_pair(gameboard, board, matches)
+        for item in pair:
+            match = set_board(gameboard, board, pair[0], pair[1])
+            if match:
+                matches.add(item)
+        is_same_position(pair[0], pair[1], board)
         cont()
-
         draw_board(gameboard)
-        if is_complete(gameboard):
-            print(f"\nYou took {steps} steps to complete the game! ")
-            break
         steps += 1
+    print(f"\nYou took {steps} steps to complete the game! ")
 
 
 def main():
