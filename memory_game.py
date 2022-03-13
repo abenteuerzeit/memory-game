@@ -24,19 +24,37 @@ def generate_board(height, width):
         print("or not enough letters in the latin alphabet to generate the board.")
 
 
-def get_user_field_position():
-    # The user can select a field on the board, by typing in its coordinates, such as B2.
-    # The letter denotes the column (A is 0, B is 1, and so on...)
-    # and the number denotes the row. Do not forget that 1 actually refers to 0 index.
-    # The program checks whether the user input is in the LETTERNUMBER format, such as B2 or C4.
-    # The program checks whether the input number is positive and does not exceed the number of rows on the board.
-    # The program checks whether the position of the input letter in the alphabet
-    # does not exceed the number of columns on the board.
-    # The program keeps asking the user for a field until receiving valid input.
-    # After the input is validated,
-    # coordinates of the selected field are passed further into the program logic
-    # as an integer tuple (row, column).
-    pass
+def get_user_field_position(board):
+    valid = False
+    while valid is False:
+        height = len(board)
+        try:
+            user_position = input("Select field coordinates (such as B2): ")
+            if user_position == "":
+                raise ValueError
+            if str.upper(user_position[0]) not in alphabet:
+                raise ValueError
+            if user_position[1:].strip().isdigit() is not True:
+                raise ValueError
+            if user_position[1:]:
+                row = int(user_position[1:])
+                if row < 0:
+                    raise ValueError
+                if row > height:
+                    raise ValueError
+            if user_position[0]:
+                if str.upper(user_position[0]) > alphabet[len(board[0])-1]:
+                    raise ValueError
+            for count, letter in enumerate(alphabet):
+                if letter == str.upper(user_position[0]):
+                    column = count + 1
+            valid = True
+            print("The input is valid, the coordinates are: ")
+            print(row - 1, column - 1)
+            return row - 1, column - 1
+        except ValueError:
+            print("Invalid input! Try again... ")
+            valid = False
 
 
 def display_menu():
@@ -85,9 +103,11 @@ def main():
     print("Welcome to Memory Game!")
     board_size = get_difficulty()
     console_clear()
-    board = generate_board(height=board_size[0], width=board_size[1])
+    height = board_size[0]
+    width = board_size[1]
+    board = generate_board(height, width)
     draw_board(board)
-
+    get_user_field_position(board)
 
 # The fields of the letter board are all concealed by default.
 # The board is displayed to the user.
@@ -98,5 +118,7 @@ def main():
 # After that, the fields are concealed again.
 # The game ends when all fields are revealed.
 # The game counts the number of steps taken to complete the game and displays this number after winning the game.
+
+
 if __name__ == "__main__":
     main()
