@@ -66,6 +66,7 @@ def get_user_field_position(board):
 
 def display_menu():
     print("Select a difficulty level. Enter the corresponding number. ")
+    print("0. Noob")
     print("1. Easy")
     print("2. Medium")
     print("3. Hard")
@@ -77,14 +78,13 @@ def get_difficulty():
         try:
             user_input = int(input("Select a difficulty level: "))
             if user_input == 1:
-                board_size = [5, 4]
-                return board_size
+                return [5, 4]
             elif user_input == 2:
-                board_size = [5, 6]
-                return board_size
+                return [5, 6]
             elif user_input == 3:
-                board_size = [5, 10]
-                return board_size
+                return [5, 10]
+            elif user_input == 0:
+                return [2, 2]
             else:
                 print("\nOption not avaialable.")
                 raise ValueError
@@ -150,6 +150,7 @@ def is_complete(gameboard):
         if hash_count == 0:
             print("YOU WIN!")
             return True
+
 
 def run_game(gameboard, board):
     steps = 1
