@@ -17,7 +17,7 @@ def generate_board(rows, columns):
             pair = random.choice(alphabet)
             pairs.append(pair)
             pairs.append(pair)
-        if ammount_of_letters > len(alphabet) or ammount_of_letters % 2 != 0:
+        if ammount_of_letters > len(alphabet)*2 or ammount_of_letters % 2 != 0:
             raise ValueError
         else:
             matrix = []
@@ -49,7 +49,7 @@ def get_user_field_position(board):
                 raise ValueError
             if user_position[1:]:
                 row = int(user_position[1:])
-                if row < 0:
+                if row <= 0:
                     raise ValueError
                 if row > height:
                     raise ValueError
@@ -97,8 +97,8 @@ def get_difficulty():
 
 
 def draw_board(board):
-    width = len(board)
-    columns = [letter for letter in alphabet[:width-1]]
+    width = len(board[0])
+    columns = [letter for letter in alphabet[:width]]
     print("\n     " + " ".join(columns) + "\n")
     for count, row in enumerate(board):
         print(f"{count + 1}    " + " ".join(row))
