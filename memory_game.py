@@ -191,10 +191,13 @@ def get_pair(gameboard, board, matches):
             elif attempt == 2 and pair[2] == pair[1]:
                 raise ValueError
             elif attempt == 2:
+                console_clear()
                 draw_board(show_letter(gameboard, board, guess))
             elif guess in pair:
                 raise ValueError
-            draw_board(show_letter(gameboard, board, guess))
+            else:
+                console_clear()
+                draw_board(show_letter(gameboard, board, guess))
         except ValueError:
             if attempt == 2:
                 print("Try again! That field is already revealed")
