@@ -1,8 +1,8 @@
 import os
 import random
-from re import I
 
 alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+
 
 # clears the screen
 def console_clear():
@@ -20,20 +20,24 @@ def generate_board(height, width):
                 matrix.append([random.choice(alphabet) for i in range(width)])
             return matrix
     except ValueError:
-        print("Error! \nEither the height or width is an odd number,\nor not enough letters in the latin alphabet to generate the board.")
+        print("Error! \nEither the height or width is an odd number,")
+        print("or not enough letters in the latin alphabet to generate the board.")
 
 
 def get_user_field_position():
-    board_fields = {}
-    
-# The user can select a field on the board, by typing in its coordinates, such as B2. 
-# The letter denotes the column (A is 0, B is 1, and so on...) and the number denotes the row. Do not forget that 1 actually refers to 0 index.
-# The program checks whether the user input is in the LETTERNUMBER format, such as B2 or C4.
-# The program checks whether the input number is positive and does not exceed the number of rows on the board.
-# The program checks whether the position of the input letter in the alphabet does not exceed the number of columns on the board.
-# The program keeps asking the user for a field until receiving valid input.
-# After the input is validated, coordinates of the selected field are passed further into the program logic as an integer tuple (row, column).
-    pass 
+    # The user can select a field on the board, by typing in its coordinates, such as B2.
+    # The letter denotes the column (A is 0, B is 1, and so on...)
+    # and the number denotes the row. Do not forget that 1 actually refers to 0 index.
+    # The program checks whether the user input is in the LETTERNUMBER format, such as B2 or C4.
+    # The program checks whether the input number is positive and does not exceed the number of rows on the board.
+    # The program checks whether the position of the input letter in the alphabet
+    # does not exceed the number of columns on the board.
+    # The program keeps asking the user for a field until receiving valid input.
+    # After the input is validated,
+    # coordinates of the selected field are passed further into the program logic
+    # as an integer tuple (row, column).
+    pass
+
 
 def display_menu():
     print("Select a difficulty level. Enter the corresponding number. ")
@@ -71,10 +75,11 @@ def draw_board(board):
         print(f"{count + 1}    " + " ".join(row))
     print("")
 
-# During the game, the fields can be either concealed or revealed. 
-# The letter of the field is displayed only when the field is revealed. 
+# During the game, the fields can be either concealed or revealed.
+# The letter of the field is displayed only when the field is revealed.
 # When the field is concealed, # is displayed.
 # The terminal window is cleaned every time the board is redrawn.
+
 
 def main():
     print("Welcome to Memory Game!")
@@ -89,8 +94,9 @@ def main():
 # The game asks asked to select a field, which is then revealed (its letter is being shown on the redrawn board).
 # The game asks to select another field, which is then revealed (its letter is being shown on the redrawn board).
 # If the two selected fields are a match (have the same letter), they remain revealed for the rest of the game.
-# If the two selected fields are not a match (do not have the same letters), the user is asked to press Enter. After that, the fields are concealed again.
+# If the two selected fields are not a match (do not have the same letters), the user is asked to press Enter.
+# After that, the fields are concealed again.
 # The game ends when all fields are revealed.
 # The game counts the number of steps taken to complete the game and displays this number after winning the game.
 if __name__ == "__main__":
-   main()
+    main()
