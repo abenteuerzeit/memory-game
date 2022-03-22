@@ -42,23 +42,22 @@ def generate_board(rows, columns):
         print("\n\n\t\t(╯°□°)╯︵ ┻━┻ \n\n")
 
 
+def is_position_correct(user_position):
+    is_empty = user_position == ""
+    is_first_char_in_alphabet = str.upper(user_position[0]) not in alphabet
+    is_second_char_digit = user_position[1:].strip().isdigit() is not True
+    return is_empty and is_first_char_in_alphabet and is_second_char_digit
+
 def get_user_field_position(board):
-    valid = False
-    while valid is False:
+    while True:
         height = len(board)
         try:
             user_position = input("Select field coordinates (such as B2): ")
-            if user_position == "":
-                raise ValueError
-            if str.upper(user_position[0]) not in alphabet:
-                raise ValueError
-            if user_position[1:].strip().isdigit() is not True:
+            if is_position_correct(user_position):
                 raise ValueError
             if user_position[1:]:
                 row = int(user_position[1:])
-                if row <= 0:
-                    raise ValueError
-                if row > height:
+                if row <= 0 and row > height:
                     raise ValueError
             if user_position[0]:
                 if str.upper(user_position[0]) > alphabet[len(board[0])-1]:
@@ -66,35 +65,33 @@ def get_user_field_position(board):
             for count, letter in enumerate(alphabet):
                 if letter == str.upper(user_position[0]):
                     column = count + 1
-            valid = True
             return row - 1, column - 1
         except ValueError:
             print("Invalid input! Try again... ")
-            valid = False
+            continue
 
 
 def display_menu():
-    print("\tSelect a difficulty level. Enter the corresponding number.\n")
-    print("\t\t0. Noob")
-    print("\t\t1. Easy")
-    print("\t\t2. Medium")
-    print("\t\t3. Hard")
-    print("\t\t4. Custom board size...")
+    tekst = '''
+        Select a difficulty level. Enter the corresponding number. 
+            0. Noob
+            1. Easy
+            2. Medium
+            3. Hard
+            4. Custom board size...
+    '''
+    print(tekst)
 
 
 def get_difficulty():
+    difficulties = {1: [5,4], 2: [5,6], 3: [5,10], 0: [2,2]}
     while True:
         display_menu()
         try:
             user_input = int(input("Enter level: "))
-            if user_input == 1:
-                return [5, 4]
-            elif user_input == 2:
-                return [5, 6]
-            elif user_input == 3:
-                return [5, 10]
-            elif user_input == 0:
-                return [2, 2]
+
+            if user_input in difficulties.keys():
+                return difficulties[user_input]
             elif user_input == 4:
                 while True:
                     try:
@@ -124,7 +121,7 @@ def hide(board):
     hidden = []
     rows = len(board)
     for row in range(rows):
-        hidden.append(["#" for i in range(rowlength)])
+        hidden.append(["#"]*rowlength)
     return hidden
 
 
@@ -142,13 +139,11 @@ def is_same_position(first_guess, second_guess, board):
                 row2 = second_guess[0]
                 col2 = second_guess[1]
                 return row2, col2
-            else:
-                raise ValueError
+            raise ValueError
         except ValueError:
             print("\nDon't choose the same position!")
             second_guess = get_user_field_position(board)
-            row2 = second_guess[0]
-            col2 = second_guess[1]
+            row2, col2 = second_guess
             continue
 
 
@@ -174,19 +169,17 @@ def is_complete(gameboard):
 
 
 def set_board(gameboard, board, guess1, guess2):
-    row1 = guess1[0]
-    col1 = guess1[1]
-    row2 = guess2[0]
-    col2 = guess2[1]
+    row1, col1 = guess1
+    row2, col2 = guess2
+
     # match
     if board[row1][col1] == board[row2][col2]:
         gameboard[row1][col1] = board[row1][col1]
         gameboard[row2][col2] = board[row2][col2]
         return True
-    else:
-        gameboard[row1][col1] = "#"
-        gameboard[row2][col2] = "#"
-        return False
+    gameboard[row1][col1] = "#"
+    gameboard[row2][col2] = "#"
+    return False
 
 
 def save_guesses(guess, match):
@@ -203,9 +196,8 @@ def get_pair(gameboard, board, matches):
             print(f"Enter value nr {attempt}...")
             guess = get_user_field_position(board)
             pair[attempt] = guess
-            if pair[attempt] in matches:
-                raise ValueError
-            elif attempt == 2 and pair[2] == pair[1]:
+            # TODO move condition to separate def
+            if pair[attempt] in matches and attempt == 2 and pair[2] == pair[1]:
                 raise ValueError
             elif attempt == 2:
                 console_clear()
