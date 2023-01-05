@@ -85,15 +85,21 @@ def display_menu():
 
 
 def get_difficulty():
-    difficulties = {1: [5,4], 2: [5,6], 3: [5,10], 0: [2,2]}
+    difficulty_map = {
+        0: (2, 2),
+        1: (5, 4),
+        2: (5, 6),
+        3: (5, 10),
+        4: (0, 0)
+    }
     while True:
         display_menu()
         try:
             user_input = int(input("Enter level: "))
-
-            if user_input in difficulties.keys():
-                return difficulties[user_input]
-            elif user_input == 4:
+            if user_input not in difficulty_map.keys():
+                print("\nOption not available.")
+                raise ValueError
+            if user_input == 4:
                 while True:
                     try:
                         height = int(input("Enter how many rows you want as a whole number: "))
@@ -101,9 +107,7 @@ def get_difficulty():
                         return height, width
                     except ValueError:
                         continue
-            else:
-                print("\nOption not avaialable.")
-                raise ValueError
+            return difficulty_map[user_input]
         except ValueError:
             print("\nInvalid input. Try again. ")
 
