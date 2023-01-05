@@ -44,9 +44,10 @@ def generate_board(rows, columns):
 
 def is_position_correct(user_position):
     is_empty = user_position == ""
-    is_first_char_in_alphabet = str.upper(user_position[0]) not in alphabet
-    is_second_char_digit = user_position[1:].strip().isdigit() is not True
-    return is_empty and is_first_char_in_alphabet and is_second_char_digit
+    is_first_char_letter = user_position[0].isalpha()
+    is_second_char_digit = user_position[1:].isdigit()
+    return is_empty or not (is_first_char_letter and is_second_char_digit)
+
 
 def get_user_field_position(board):
     while True:
